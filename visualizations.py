@@ -49,7 +49,16 @@ def goals_count_line_plot(tournament_name, rs):
  
 
     # Update layout settings
-    fig.update_layout(title='Goals Scored in Different Tournaments', xaxis_title='Time', yaxis_title='Goals Scored')
+    fig.update_layout(xaxis_title='Year', 
+                      yaxis_title='Goals Scored',
+                      xaxis=dict(showgrid=False),
+                      yaxis=dict(showgrid=False),
+                      plot_bgcolor="white",
+                      margin={"r": 20, "t": 20, "b": 20}
+                      )
+    
+    fig.update_xaxes(showgrid=False, linecolor="black")
+    fig.update_xaxes(showgrid=False)
 
     return fig
 
@@ -108,11 +117,11 @@ def trophy_count_hbarchart(tournament_name, rs):
         asian_cup_champions.rename(columns={'Winning Team': 'Winner', 'count': 'Trophies won overall'}, inplace=True)
 
         # Sort dataframes by trophies won in descending order
-        world_cup_champions_sorted = world_cup_champions.sort_values(by='Trophies won overall', ascending=False)
-        copa_america_champions_sorted = copa_america_champions.sort_values(by='Trophies won overall', ascending=False)
-        afcon_champions_sorted = afcon_champions.sort_values(by='Trophies won overall', ascending=False)
-        euros_champions_sorted = euros_champions.sort_values(by='Trophies won overall', ascending=False)
-        asian_cup_champions_sorted = asian_cup_champions.sort_values(by='Trophies won overall', ascending=False)
+        world_cup_champions_sorted = world_cup_champions.sort_values(by='Trophies won overall', ascending=True)
+        copa_america_champions_sorted = copa_america_champions.sort_values(by='Trophies won overall', ascending=True)
+        afcon_champions_sorted = afcon_champions.sort_values(by='Trophies won overall', ascending=True)
+        euros_champions_sorted = euros_champions.sort_values(by='Trophies won overall', ascending=True)
+        asian_cup_champions_sorted = asian_cup_champions.sort_values(by='Trophies won overall', ascending=True)
 
         # Add horizontal bar plots to the single plot
         fig_trophies.add_trace(go.Bar(y=world_cup_champions_sorted['Winner'], x=world_cup_champions_sorted['Trophies won overall'], orientation='h', name='FIFA World Cup'))
@@ -129,6 +138,7 @@ def trophy_count_hbarchart(tournament_name, rs):
         tournament_groupby = tournament.groupby('Year')
         tournament_final = tournament_groupby.last()
 
+        # resolving certain faults in the Finals data of the 'Copa América'
         if tournament_name == 'Copa América':
             # resolving certain faults in the Finals data
             indexNames = tournament_final[tournament_final['Winning Team'] == 'Draw'].index
@@ -144,16 +154,20 @@ def trophy_count_hbarchart(tournament_name, rs):
         tournament_champions.rename(columns={'Winning Team': 'Winner', 'count': 'Trophies won overall'}, inplace=True)
 
         # Sort dataframes by trophies won in descending order
-        tournament_champions_sorted = tournament_champions.sort_values(by='Trophies won overall', ascending=False)
+        tournament_champions_sorted = tournament_champions.sort_values(by='Trophies won overall', ascending=True)
 
         # Add horizontal bar plots to the single plot
         fig_trophies.add_trace(go.Bar(y=tournament_champions_sorted['Winner'], x=tournament_champions_sorted['Trophies won overall'], orientation='h', name=tournament_name))
 
 
     # Update layout settings
-    fig_trophies.update_layout(title='Most decorated countries', barmode='stack')
-
-    # Set a taller height for the plot
-    fig_trophies.update_layout(height=800)
+    fig_trophies.update_layout(xaxis_title='No. of Trophies Won',
+                               barmode='stack',
+                               plot_bgcolor="white",
+                               margin={"r": 20, "t": 20, "b": 20}
+                               )
+    
+    fig_trophies.update_xaxes(tick0=0, dtick=1, showgrid=False, linecolor="black")
+    fig_trophies.update_yaxes(showgrid=False)
 
     return fig_trophies
