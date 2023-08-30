@@ -7,6 +7,7 @@ from dash.dependencies import Input, Output
 
 from data_processing import processing_data
 from visualizations import goals_count_line_plot, trophy_count_hbarchart
+from stats import get_highest_goalscoring_edition, get_country_with_highest_trophy_count
 
 
 # reading the CSV files
@@ -27,34 +28,6 @@ rs = processing_data(results_df, shootouts_df)
 
 # Initialize the Dash app
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.DARKLY])
-
-
-# # Create the navbar
-# navbar = html.Div(
-#     className="navbar navbar-expand-lg navbar-dark bg-dark",
-#     children=[
-#         html.Nav(
-#             className="navbar-nav",
-#             children=[
-#                 html.Link(
-#                     className="nav-item nav-link active",
-#                     href="#",
-#                     **{'children': 'Home'},
-#                 ),
-#                 html.Link(
-#                     className="nav-item nav-link",
-#                     href="#",
-#                     **{'children': 'About'},
-#                 ),
-#                 html.Link(
-#                     className="nav-item nav-link",
-#                     href="#",
-#                     **{'children': 'Contact'},
-#                 ),
-#             ],
-#         )
-#     ],
-# )
 
 
 # Define the layout of the dashboard
@@ -111,23 +84,138 @@ app.layout = dbc.Container([
         ], width=9)
     ], style={"padding-top": "20px", "padding-bottom": "20px"}),
 
-    #
+    # champions data
     dbc.Row([
+        dbc.Col([
+            dcc.Markdown(
+                '##### Champions',
+                style={"text-align": "center"},
+            ),
+            dcc.Graph(id='trophy-count-hbarchart', figure=trophy_count_hbarchart('FIFA World Cup', rs.copy()))
+        ], width=9),
+
         dbc.Col([
             dcc.Markdown(
                 '##### Most Decorated Countries',
                 style={"text-align": "center"},
             ),
-            dcc.Graph(id='trophy-count-hbarchart', figure=trophy_count_hbarchart('FIFA World Cup', rs))
-        ], width=6),
 
+            # Countries who have won the most
+            dbc.Row([
+                dbc.Col([
+                    dcc.Markdown(
+                        id='most-decorated-countries-md-1',
+                        style={"text-align": "center", "padding-top": "10px", "padding-bottom": "10px"},
+                    ),
+                ], width=6),
+                dbc.Col([
+                    dcc.Markdown(
+                        id='most-trophies-won-md-1',
+                        style={"text-align": "center", "padding-top": "10px", "padding-bottom": "10px"},
+                    ),
+                ], width=6),
+            ], style={"padding-top": "20px", "padding-bottom": "20px"}),
+
+            dbc.Row([
+                dbc.Col([
+                    dcc.Markdown(
+                        id='most-decorated-countries-md-2',
+                        style={"text-align": "center", "padding-top": "10px", "padding-bottom": "10px"},
+                    ),
+                ], width=6),
+                dbc.Col([
+                    dcc.Markdown(
+                        id='most-trophies-won-md-2',
+                        style={"text-align": "center", "padding-top": "10px", "padding-bottom": "10px"},
+                    ),
+                ], width=6),
+            ], style={"padding-top": "20px", "padding-bottom": "20px"}),
+
+            dbc.Row([
+                dbc.Col([
+                    dcc.Markdown(
+                        id='most-decorated-countries-md-3',
+                        style={"text-align": "center", "padding-top": "10px", "padding-bottom": "10px"},
+                    ),
+                ], width=6),
+                dbc.Col([
+                    dcc.Markdown(
+                        id='most-trophies-won-md-3',
+                        style={"text-align": "center", "padding-top": "10px", "padding-bottom": "10px"},
+                    ),
+                ], width=6),
+            ], style={"padding-top": "20px", "padding-bottom": "20px"}),
+
+            
+        ], width=3)
+    ], style={"padding-top": "20px", "padding-bottom": "20px"}),
+
+
+
+    dbc.Row([
         dbc.Col([
             dcc.Markdown(
                 '##### Goals Scored Across Different Editions',
                 style={"text-align": "center"},
             ),
-            dcc.Graph(id='goals-count-line-plot', figure=goals_count_line_plot('FIFA World Cup', rs))
-        ], width=6)
+            dcc.Graph(id='goals-count-line-plot', figure=goals_count_line_plot('FIFA World Cup', rs.copy()))
+        ], width=9),
+
+        # Top 3 editions wth most goals scored
+        dbc.Col([
+            dcc.Markdown(
+                '##### Highest Goalscoring Editions',
+                style={"text-align": "center"},
+            ),
+
+            # Year/Edition of highest scoring tournaments
+            dbc.Row([
+                dbc.Col([
+                    dcc.Markdown(
+                        id='highest-goalscoring-editions-md-1',
+                        style={"text-align": "center", "padding-top": "10px", "padding-bottom": "10px"},
+                    ),
+                ], width=6),
+                dbc.Col([
+                    dcc.Markdown(
+                        id='highest-num-goals-scored-md-1',
+                        style={"text-align": "center", "padding-top": "10px", "padding-bottom": "10px"},
+                    ),
+                ], width=6),
+            ], style={"padding-top": "20px", "padding-bottom": "20px"}),
+
+            dbc.Row([
+                dbc.Col([
+                    dcc.Markdown(
+                        id='highest-goalscoring-editions-md-2',
+                        style={"text-align": "center", "padding-top": "10px", "padding-bottom": "10px"},
+                    ),
+                ], width=6),
+                dbc.Col([
+                    dcc.Markdown(
+                        id='highest-num-goals-scored-md-2',
+                        style={"text-align": "center", "padding-top": "10px", "padding-bottom": "10px"},
+                    ),
+                ], width=6),
+            ], style={"padding-top": "20px", "padding-bottom": "20px"}),
+
+            dbc.Row([
+                dbc.Col([
+                    dcc.Markdown(
+                        id='highest-goalscoring-editions-md-3',
+                        style={"text-align": "center", "padding-top": "10px", "padding-bottom": "10px"},
+                    ),
+                ], width=6),
+                dbc.Col([
+                    dcc.Markdown(
+                        id='highest-num-goals-scored-md-3',
+                        style={"text-align": "center", "padding-top": "10px", "padding-bottom": "10px"},
+                    ),
+                ], width=6),
+            ], style={"padding-top": "20px", "padding-bottom": "20px"}),
+
+            
+        ], width=3)
     ], style={"padding-top": "20px", "padding-bottom": "20px"}),
 
 
@@ -143,8 +231,25 @@ app.layout = dbc.Container([
 
 
 @app.callback(
-    [Output('goals-count-line-plot', 'figure'), Output('trophy-count-hbarchart', 'figure')],  # Update the figure of this Graph component
-    [Input('time-slider', 'value'), Input('tournament-dropdown', 'value')] # Example: If you have an input component
+    [Output('goals-count-line-plot', 'figure'), 
+     Output('trophy-count-hbarchart', 'figure'),
+     Output('most-decorated-countries-md-1', 'children'),
+     Output('most-decorated-countries-md-2', 'children'),
+     Output('most-decorated-countries-md-3', 'children'),
+     Output('most-trophies-won-md-1', 'children'),
+     Output('most-trophies-won-md-2', 'children'),
+     Output('most-trophies-won-md-3', 'children'), 
+     Output('highest-goalscoring-editions-md-1', 'children'),
+     Output('highest-goalscoring-editions-md-2', 'children'),
+     Output('highest-goalscoring-editions-md-3', 'children'),
+     Output('highest-num-goals-scored-md-1', 'children'),
+     Output('highest-num-goals-scored-md-2', 'children'),
+     Output('highest-num-goals-scored-md-3', 'children'),
+    ],
+
+    [Input('time-slider', 'value'), 
+     Input('tournament-dropdown', 'value')
+    ]
 )
 
 def update_plots(selected_time_period, selected_tournament):
@@ -152,10 +257,55 @@ def update_plots(selected_time_period, selected_tournament):
     filtered_rs = rs[(rs['Year'] >= selected_time_period[0]) & (rs['Year'] <= selected_time_period[1])]
 
     # Create updated figures
-    updated_goals_count_line_plot = goals_count_line_plot(selected_tournament, filtered_rs)
-    updated_trophy_count_hbarchart = trophy_count_hbarchart(selected_tournament, filtered_rs)
+    updated_goals_count_line_plot = goals_count_line_plot(selected_tournament, filtered_rs.copy())
+    updated_trophy_count_hbarchart = trophy_count_hbarchart(selected_tournament, filtered_rs.copy())
 
-    return updated_goals_count_line_plot, updated_trophy_count_hbarchart
+    #
+    country_with_highest_trophy_count_df = get_country_with_highest_trophy_count(selected_tournament, filtered_rs.copy())
+
+    most_decorated_countries = country_with_highest_trophy_count_df['Winner'].tolist()
+    most_trophies_won = country_with_highest_trophy_count_df['Trophies won overall'].tolist()
+
+    most_decorated_countries_md_1 = '1. ' + str(most_decorated_countries[0])
+    most_decorated_countries_md_2 = '2. ' + str(most_decorated_countries[1])
+    most_decorated_countries_md_3 = '3. ' + str(most_decorated_countries[2])
+    most_trophies_won_md_1 = str(int(most_trophies_won[0]))
+    most_trophies_won_md_2 = str(int(most_trophies_won[1]))
+    most_trophies_won_md_3 = str(int(most_trophies_won[2]))
+
+    #
+    highest_scoring_editions_df = get_highest_goalscoring_edition(selected_tournament, filtered_rs.copy())
+
+    highest_scoring_editions = highest_scoring_editions_df.index.tolist()
+    highest_num_goals_scored = highest_scoring_editions_df['Goals Scored'].tolist()
+
+
+    highest_goalscoring_editions_md_1 = '1. ' + str(highest_scoring_editions[0])
+    highest_goalscoring_editions_md_2 = '2. ' + str(highest_scoring_editions[1])
+    highest_goalscoring_editions_md_3 = '3. ' + str(highest_scoring_editions[2])
+
+    highest_num_goals_scored_md_1 = str(int(highest_num_goals_scored[0]))
+    highest_num_goals_scored_md_2 = str(int(highest_num_goals_scored[1]))
+    highest_num_goals_scored_md_3 = str(int(highest_num_goals_scored[2]))
+
+
+
+    return (
+        updated_goals_count_line_plot,
+        updated_trophy_count_hbarchart,
+        most_decorated_countries_md_1,
+        most_decorated_countries_md_2,
+        most_decorated_countries_md_3,
+        most_trophies_won_md_1,
+        most_trophies_won_md_2,
+        most_trophies_won_md_3,
+        highest_goalscoring_editions_md_1,
+        highest_goalscoring_editions_md_2,
+        highest_goalscoring_editions_md_3,
+        highest_num_goals_scored_md_1,
+        highest_num_goals_scored_md_2,
+        highest_num_goals_scored_md_3
+    )
 
 
 if __name__ == '__main__':
