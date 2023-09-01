@@ -1,5 +1,22 @@
 import pandas as pd
 
+def get_defending_champion(tournament_name, rs):
+    # creating dataframe for the tournament of choice
+    tournament = rs.loc[rs['Tournament'] == tournament_name]
+
+    # creating dataframes for finals of the respective tournaments
+    tournament_groupby = tournament.groupby('Year')
+    tournament_final = tournament_groupby.last()
+
+    # resolving certain faults in the Finals data of the 'Copa América'
+    if tournament_name == 'Copa América':
+        # resolving certain faults in the Finals data
+        indexNames = tournament_final[tournament_final['Winning Team'] == 'Draw'].index
+        tournament_final.drop(indexNames, inplace = True)
+        
+    return tournament_final
+
+
 def get_country_with_highest_trophy_count(tournament_name, rs):
     # creating dataframe for the tournament of choice
     tournament = rs.loc[rs['Tournament'] == tournament_name]
