@@ -28,6 +28,7 @@ rs = processing_data(results_df, shootouts_df)
 
 # Initialize the Dash app
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.DARKLY])
+server = app.server
 
 
 # Define the layout of the dashboard
