@@ -5,9 +5,9 @@ from dash import dcc, html, callback
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 
-from data_processing import processing_data
-from visualizations import goals_count_line_plot, trophy_count_hbarchart
-from stats import get_highest_goalscoring_edition, get_country_with_highest_trophy_count, get_defending_champion
+from src.data_processing import processing_data
+from src.visualizations import goals_count_line_plot, trophy_count_hbarchart
+from src.stats import get_highest_goalscoring_edition, get_country_with_highest_trophy_count, get_defending_champion
 
 
 # reading the CSV files
