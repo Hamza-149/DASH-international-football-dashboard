@@ -1,5 +1,7 @@
 # International Football Dashboard (Interactive)
 
+### [*Check out the live dashboard*](https://international-football-dashboard.onrender.com)
+
 1. [Overview](#overview)
 2. [Tech Stack](#tech-stack)
 3. [References](#references)
